@@ -1,0 +1,1546 @@
+Algoritmo "WORDS"
+
+// VAR GLOBAIS
+Var
+tutorial:logico
+carregar:caracter
+x,y,z,resp,n:inteiro
+
+// VETORES: Armazenam os resultados das fases
+vet_dicas:vetor[1..3] de caracter
+vet_erros,vet_score:vetor[1..3] de inteiro
+
+// MENU DO JOGO ---------------------------------------------------//
+procedimento menu
+inicio
+ repita
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("    *========================================*    ")
+ escreval("    *              _ _   _ _   _ _     _ _   *    ")
+ escreval("    *  \        / |   | |_ _| |   \  (       *    ")
+ escreval("    *   \  /\  /  |   | | \   |    )  `- _   *    ")
+ escreval("    *    \/  \/   |_ _| |  \  |_ _/   _ _ )  *    ")
+ escreval("    *========================================*    ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("  B                                        _ _ _ _")
+ escreval("  E                    MENU               | * * * ")
+ escreval("* M * *                                   |   *   ")
+ escreval("  |                  1.jogar              |     * ")
+ escreval("  V                  2.Score              | * * * ")
+ escreval("* I                  3.Créditos           |_ _ _*_")
+ escreval("  N                  4.Sair                ->???  ")
+ escreval("  D *                                             ")
+ escreval("  O   *                                           ")
+ escreval("        *                                         ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ escreva("-> Selecione uma opção: ")
+ leia(resp)
+ ate (resp=1)ou(resp=2)ou(resp=3)ou(resp=4)
+
+ escolha resp
+   caso 1
+    jogar
+   caso 2
+    score1
+   caso 3
+    creditos
+   caso 4
+    sair
+ fimescolha
+
+fimprocedimento
+//----------------------------------------------------------------------//
+
+// OPÇÃO JOGAR DO MENU -------------------------------------------------//
+procedimento jogar
+var
+resp:inteiro
+inicio
+ se (x=1)e(y=1)e(z=1) entao  // <- VALIDANDO SE AS FASES FORAM CONCLUIDAS
+  limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("      PARABENS VOCÊ COMPLETOU TODAS AS FASES!     ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval(" FICO LISONJEADO EM SABER QUE VOCÊ CHEGOU ATÉ AQUI,")
+  escreval(" PARA CONHECER MELHOR O PROJETO RECOMENDO QUE LEIA ")
+  escreval(" OS CRÉDITOS NO MENU DE OPÇÕES.                   ")
+  escreval("                                                  ")
+  escreval("  OBRIGADO, ATÉ LOGO               /","/","/","/  ")
+  escreval("                                  (º_º)           ")
+  escreval("                                  _\ /_           ")
+  escreval("                                 /|   |\          ")
+  escreval("                                / |___| \         ")
+  escreval("                               *  |   |  *        ")
+  escreval("                                  |   |           ")
+  escreval("                                 ==   ==          ")
+  escreval("                                                  ")
+  escreval("           69 65 83 84 69 82 32 69 71 71          ")
+  escreval("                                                  ")
+  escreval("/------------------------------------------------/")
+   escreva(" -> Aperte ENTER para ver os CRÉDITOS!")
+  leia(resp)
+  creditos
+ fimse
+  
+ enquanto (tutorial=falso) faca // APRESENTANDO O TUTORIAL
+  limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                                                  ")
+  escreval("                     TUTORIAL                     ")
+  escreval("                                                  ")
+  escreval(" Objetivo: completar toda a cruzadinha, digitando ")
+  escreval(" a informação correta                             ")
+  escreval("                                                  ")
+  escreval("  Exemplo:                                        ")
+  escreval("           _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _        ")
+  escreval("          |                               |       ")
+  escreval("          |               2º              |       ")
+  escreval("          |               -               |       ")
+  escreval("          |               *               |       ")
+  escreval("          |  -> 1º| T E R R E M O T O     |       ")
+  escreval("          |               *               |       ")
+  escreval("          |           3º| * * * *         |       ")
+  escreval("          |               *               |       ")
+  escreval("          |                               |       ")
+  escreval("          |1º Abalo sísmico na crosta ter-|       ")
+  escreval("          |restre, causa ruptura de rochas|       ")
+  escreval("          |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|       ")
+  escreval("           -> Digite a palavra: Terremoto         ")
+  escreval("                                                  ")
+  escreval("/------------------------------------------------/")
+   escreva(" -> Aperte ENTER para continuar!")
+  leia(resp)
+  tutorial<-verdadeiro
+ fimenquanto
+
+ repita       // PEDINDO PARA O USUÁRIO ESCOLHER O TEMA
+ limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                                                  ")
+  escreval("                  ESCOLHA UM TEMA                 ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("     1.Cidades      2.Países       3.Animais      ")
+  escreval("                                                  ")
+  escreval("      (",x,"/1 )        (",y,"/1 )        (",z,"/1 )")
+  escreval("     Concluido      Concluido      Concluido      ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("     4.Voltar ao MENU                             ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval(" Sistema: Você poderá retornar para o MENU enquan-")
+  escreval(" to estiver jogando, apenas digite VOLTAR.        ")
+  escreval("                                                  ")
+  escreval("                                Aproveite o jogo! ")
+  escreval("/------------------------------------------------/")
+ escreva("-> Selecione uma opção: ")
+ leia(resp)
+ ate (resp=1)ou(resp=2)ou(resp=3)ou(resp=4)
+
+ escolha resp
+   caso 1
+    fase_cidades
+   caso 2
+    fase_paises
+   caso 3
+    fase_animais
+   caso 4
+    menu
+ fimescolha
+fimprocedimento
+//-----------------------------------------------------------------//
+
+// OPÇÃO SCORE ----------------------------------------------------//
+procedimento score1
+var
+resp:caracter
+imagem1,imagem2,imagem3:vetor[1..5] de caracter
+inicio
+  imagem1[5] <- "Não concluído"
+  imagem2[5] <- "Não concluído"   // CASO O USUARIO NÂO TENHA COMPLETADO AS FASES
+  imagem3[5] <- "Não concluído"
+
+  //  TRATAMENTO DOS DADOS PARA SEREM APRESENTADOS
+  se (x=1) entao
+    se (vet_score[1]=1000)entao
+    imagem1[1] <-"       /\     "
+    imagem1[2] <-" /\ \/ /\  "
+    imagem1[3] <-"    \/    \/  "
+    imagem1[4] <-" 3 Rubys"
+    imagem1[5] <- "  Perfeito!"
+    fimse
+    se (vet_score[1]>=550) e (vet_score[1]<=999)  entao
+    imagem1[1] <-"          "
+    imagem1[2] <-" /\   /\  "
+    imagem1[3] <-"    \/   \/  "
+    imagem1[4] <-" 2 Rubys"
+    imagem1[5] <- "  Incrível!"
+    fimse
+    se (vet_score[1]<=549) e (vet_erros[1]<=9) entao
+    imagem1[1] <-"          "
+    imagem1[2] <-"   /\     "
+    imagem1[3] <-"      \/  "
+    imagem1[4] <-" 1 Rubys"
+    imagem1[5] <- "    Bom!"
+    fimse
+    se (vet_score[1]<=549) e (vet_erros[1]>=10) entao
+    imagem1[1] <-"          "
+    imagem1[2] <-"    /\     "
+    imagem1[3] <-"        \/  "
+    imagem1[4] <-"  1 Rubys"
+    imagem1[5] <- "    Bom!"
+    fimse
+  fimse
+  
+  se (y=1) entao
+    se (vet_score[2]=1000)entao
+    imagem2[1] <-"       /\     "
+    imagem2[2] <-" /\ \/ /\  "
+    imagem2[3] <-"    \/    \/  "
+    imagem2[4] <-" 3 Rubys"
+    imagem2[5] <- "  Perfeito!"
+    fimse
+    se (vet_score[2]>=550) e (vet_score[2]<=999)  entao
+    imagem2[1] <-"          "
+    imagem2[2] <-" /\   /\  "
+    imagem2[3] <-"    \/   \/  "
+    imagem2[4] <-" 2 Rubys"
+    imagem2[5] <- "  Incrível!"
+    fimse
+    se (vet_score[2]<=549) e (vet_erros[2]<=9) entao
+    imagem2[1] <-"          "
+    imagem2[2] <-"   /\     "
+    imagem2[3] <-"      \/  "
+    imagem2[4] <-" 1 Rubys"
+    imagem2[5] <- "    Bom!"
+    fimse
+    se (vet_score[2]<=549) e (vet_erros[2]>=10) entao
+    imagem2[1] <-"          "
+    imagem2[2] <-"    /\     "
+    imagem2[3] <-"        \/  "
+    imagem2[4] <-"  1 Rubys"
+    imagem2[5] <- "    Bom!"
+    fimse
+  fimse
+  
+  se (z=1) entao
+    se (vet_score[3]=1000)entao
+    imagem3[1] <-"       /\     "
+    imagem3[2] <-" /\ \/ /\  "
+    imagem3[3] <-"    \/    \/  "
+    imagem3[4] <-" 3 Rubys"
+    imagem3[5] <- "  Perfeito!"
+    fimse
+    se (vet_score[3]>=550) e (vet_score[3]<=999)  entao
+    imagem3[1] <-"          "
+    imagem3[2] <-" /\   /\  "
+    imagem3[3] <-"    \/   \/  "
+    imagem3[4] <-" 2 Rubys"
+    imagem3[5] <- "  Incrível!"
+    fimse
+    se (vet_score[3]<=549) e (vet_erros[3]<=9) entao
+    imagem3[1] <-"          "
+    imagem3[2] <-"   /\     "
+    imagem3[3] <-"      \/  "
+    imagem3[4] <-" 1 Rubys"
+    imagem3[5] <- "    Bom!"
+    fimse
+    se (vet_score[3]<=549) e (vet_erros[3]>=10) entao
+    imagem3[1] <-"          "
+    imagem3[2] <-"   /\     "
+    imagem3[3] <-"       \/  "
+    imagem3[4] <-"  1 Rubys"
+    imagem3[5] <- "    Bom!"
+    fimse
+  fimse
+
+   // APRESENTAÇÃO DOS RESULTADOS
+  limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                    FASE CIDADE                   ")
+  escreval("                                 ",imagem1[1],"   ")
+  escreval(" Erros: ",vet_erros[1],"                          ",imagem1[2],"")
+  escreval(" Usou a dica: ",vet_dicas[1],"                ",imagem1[3],"")
+  escreval("                                                  ")
+  escreval(" Score: ",vet_score[1],"                        ",imagem1[4],"")
+  escreval("                   ",imagem1[5],"")
+  escreval(" - - - - - - - - - - - - - - - - - - - - - - - - -")
+  escreval("                    FASE PAÍSES                   ")
+  escreval("                                 ",imagem2[1],"   ")
+  escreval(" Erros: ",vet_erros[2],"                          ",imagem2[2],"")
+  escreval(" Usou a dica: ",vet_dicas[2],"                ",imagem2[3],"")
+  escreval("                                                  ")
+  escreval(" Score: ",vet_score[2],"                        ",imagem2[4],"")
+  escreval("                   ",imagem2[5],"")
+  escreval(" - - - - - - - - - - - - - - - - - - - - - - - - -")
+  escreval("                    FASE ANIMAIS                  ")
+  escreval("                                 ",imagem3[1],"   ")
+  escreval(" Erros: ",vet_erros[3],"                          ",imagem3[2],"")
+  escreval(" Usou a dica: ",vet_dicas[3],"                ",imagem3[3],"")
+  escreval("                                                  ")
+  escreval(" Score: ",vet_score[3],"                        ",imagem3[4],"")
+  escreval("                   ",imagem3[5],"")
+  escreval("/------------------------------------------------/")
+   escreva(" -> Aperte ENTER para voltar ao menu!")
+   leia(resp)
+  menu
+fimprocedimento
+//-----------------------------------------------------------------//
+
+// OPÇÃO CRÉDITO DO MENU ------------------------------------------//
+procedimento creditos
+var
+resp:caracter
+inicio
+ limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                                                  ")
+  escreval("                     CRÉDITOS                     ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval(" Autor: Eduardo Voltatone                         ")
+  escreval("                                                  ")
+  escreval(" Turma: ESOFT2SB                                  ")
+  escreval("                                                  ")
+  escreval(" Versão: 3.0                                      ")
+  escreval("                                                  ")
+  escreval(" Ultima atualização: 20/11/22                     ")
+  escreval("                                                  ")
+  escreval(" Telefone para contato: (44)999363908             ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval(" Ideia: Após ver meus amigos jogando um jogo de   ")
+  escreval(" cruzadinha no celular, fiquei imaginando como    ")
+  escreval(" seria criar o mesmo jogo no VISUALG e então a    ")
+  escreval(" ideia surgiu!                                    ")
+  escreval("                                                  ")
+  escreval("                                           AOOOOW ")
+  escreval("/------------------------------------------------/")
+   escreva(" -> Aperte ENTER para voltar ao menu!                                   ")
+  leia(resp)
+  menu
+fimprocedimento
+//--------------------------------------------------------------------//
+
+// OPÇÃO SAIR DO MENU -----------------------------------------------//
+procedimento sair
+var
+resp:inteiro
+inicio
+ repita
+  limpatela
+  escreval("/------------------------------------------------/")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                    DESEJA SAIR?                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("               1.Sim            0.Não             ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("                                                  ")
+  escreval("/------------------------------------------------/")
+   escreva(" -> Selecione uma opção(1/0): ")
+  leia(resp)
+ ate(resp=1)ou(resp=0)
+
+ escolha resp
+   caso 1
+    limpatela
+    escreval("/------------------------------------------------/")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                    VOCÊ SAIU!                    ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                OBRIGADO POR JOGAR                ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                   VOLTE SEMPRE                   ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("/------------------------------------------------/")
+    fimalgoritmo
+   caso 0
+    menu
+ fimescolha
+fimprocedimento
+//-------------------------------------------------------------------//
+
+// FASE CIDADES -----------------------------------------------------//
+procedimento fase_cidades
+var
+resp,carregar,p1,p2,p3,p4,p5,p6,ver_dica:caracter
+erros,contador,cont1,cont2,cont3,cont4,cont5,cont6,score,loading,valor_dica:inteiro
+a1,o1,a2,l1,i1:caracter
+dica:logico
+inicio
+
+  se (x=1) entao  // CASO A FASE JA TENHA SIDO CONCLUÍDA
+   repita
+   limpatela
+   escreval("/------------------------------------------------/")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                       AVISO                      ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("           Você já finalizou está fase!           ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("       1.Jogar novamente           0.Voltar       ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+
+   se (resp="0") entao
+     jogar
+   fimse
+  fimse
+  
+  //LOADING DA FASE
+ para loading de 1 ate 31 faca
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("                    _ _ _ _               _       ")
+ escreval("       _           | _   _ |  \\\       (< >)     ")
+ escreval("      / \          ||_| |_||   |       (<< >>)    ")
+ escreval("     /   \         | _   _ |   |      (<<< >>>)   ")
+ escreval("    /     \        ||_| |_||_ _|_    (<<<< >>>>)  ")
+ escreval("   /_ _ _ _\ * * * | _   _   _ _ |  (<<< _ _ >>>) ")
+ escreval("   | _     |   |   ||_| |_| |_|_||   (<<|   |>>)  ")
+ escreval("   ||_| _  |   |   |   _    |_|_||    (<|   |>)   ")
+ escreval("   |   | | |   |   |  | |        |  __  |   |     ")
+ escreval(" __|___|_|_|___|___|__|_|________|_|__|_|___|____ ")
+ escreval(" ________________________________________________ ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("            Carregando...                         ")
+ escreval("          |==============================|        ")
+ escreval("           ",carregar)
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ carregar<-carregar + ">"
+ fimpara
+
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("                    _ _ _ _               _       ")
+ escreval("       _           | _   _ |  \\\       (< >)     ")
+ escreval("      / \          ||_| |_||   |       (<< >>)    ")
+ escreval("     /   \         | _   _ |   |      (<<< >>>)   ")
+ escreval("    /     \        ||_| |_||_ _|_    (<<<< >>>>)  ")
+ escreval("   /_ _ _ _\ * * * | _   _   _ _ |  (<<< _ _ >>>) ")
+ escreval("   | _     |   |   ||_| |_| |_|_||   (<<|   |>>)  ")
+ escreval("   ||_| _  |   |   |   _    |_|_||    (<|   |>)   ")
+ escreval("   |   | | |   |   |  | |        |  __  |   |     ")
+ escreval(" __|___|_|_|___|___|__|_|________|_|__|_|___|____ ")
+ escreval(" ________________________________________________ ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("            Tudo pronto!                          ")
+ escreval("          |==============================|        ")
+ escreval("             APERTE ENTER PARA INICIAR            ")
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ leia(resp)
+ 
+ p1<-"****" //ROMA
+ p2<-"*******" //LONDRES
+ p3<-"************" //MACHU-PICCHU
+ p4<-"**************" //RIO-DE-JANEIRO
+ p5<-"********"//BRASÍLIA
+ p6<-"*****"//NATAL
+ 
+ a1<-"*"
+ o1<-"*"
+ a2<-"*"   // <- LETRAS QUE ESTÃO EM DUAS PALAVRAS
+ l1<-"*"
+ i1<-"*"
+
+ ver_dica <- "Não"
+ vet_dicas[1] <- "Não"
+ 
+ repita
+ limpatela          // APRESENTAÇÃO DA FASE
+ escreval("/------------------- Cidades --------------------/")
+ escreval("                                                  ")
+ escreval("  (",contador,"/6 )    5º| ",copia(p5,1,1),"      ")
+ escreval("                   ",copia(p5,2,1),"                                  ")
+ escreval("              3º|  ",copia(p3,1,1)," ",a1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",copia(p3,7,1)," ",copia(p3,8,1)," ",copia(p3,9,1)," ",copia(p3,10,1)," ",copia(p3,11,1)," ",copia(p3,12,1),"       ")
+ escreval("           1º          ",copia(p5,4,1),"                              ")
+ escreval("           -             ",copia(p5,5,1),"                            ")
+ escreval("           ",copia(p1,1,1),"     6º| ",copia(p6,1,1),"     ",copia(p5,6,1),"          ")
+ escreval("   4º| ",copia(p4,1,1)," ",copia(p4,2,1)," ",o1," ",copia(p4,4,1)," ",copia(p4,5,1)," ",copia(p4,6,1)," ",copia(p4,7,1)," ",copia(p4,8,1)," ",a2," ",copia(p4,10,1)," ",copia(p4,11,1)," ",i1," ",copia(p4,13,1)," ",copia(p4,14,1),"     ")
+ escreval("           ",copia(p1,3,1),"             ",copia(p6,3,1),"     ",copia(p5,8,1),"      ")
+ escreval("           ",copia(p1,4,1),"               ",copia(p6,4,1),"          ")
+ escreval("                         2º| ",l1," ",copia(p2,2,1)," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",copia(p2,6,1)," ",copia(p2,7,1),"       ")
+ escreval("                                                  ")
+ escreval
+ escreval
+ escreval(" 1º:Cidade do grande   | 4º:Maior centro turístico")
+ escreval(" Coliseu, na Itália    | brasileiro               ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - -  ")
+ escreval(" 2º:Abriga o Big Ben,  | 5º:Cidade projetada em   ")
+ escreval(" capital do Reino Unido| forma de avião           ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - -  ")
+ escreval(" 3º:Cidade inca locali-| 6º:Conhecida como Capital")
+ escreval(" zada no Peru,SeculoXV | espacial do Brasil       ")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Digite a palavra: ")
+ leia(resp)
+ resp <- maiusc(resp) // PASSANDO PARA MAIUSCULO, DIMINUÍ AS POSSIBILIDADES DE ESCRITA
+
+  // VERIFICANDO A RESPOSTA
+ escolha resp
+  caso "ROMA"
+   p1 <- "ROMA"
+   o1 <- "O"
+   cont1 <- 1
+  caso "LONDRES"
+   p2 <- "LONDRES"
+   l1 <- "L"
+   cont2 <- 1
+  caso "MACHU PICCHU"
+   p3 <- "MACHU-PICCHU"
+   a1 <- "A"
+   cont3 <- 1
+  caso "RIO DE JANEIRO"
+   p4 <- "RIO-DE-JANEIRO"
+   o1 <- "O"
+   a2 <- "A"
+   i1 <- "I"
+   cont4 <- 1
+  caso "BRASÍLIA"
+   p5 <- "BRASÍLIA"
+   a1 <- "A"
+   i1 <- "I"
+   cont5 <- 1
+  caso "BRASILIA"
+   p5 <- "BRASÍLIA"
+   a1 <- "A"
+   i1 <- "I"
+   cont5 <- 1
+  caso "NATAL"
+   p6 <- "NATAL"
+   a2 <- "A"
+   l1 <- "L"
+   cont6 <- 1
+  caso "VOLTAR"
+   menu
+  caso "ME DUMB"
+   p1<-"ROMA"
+   p2<-"LONDRES"
+   p3<-"MACHU-PICCHU"
+   p4<-"RIO-DE-JANEIRO"
+   p5<-"BRASÍLIA"
+   p6<-"NATAL"
+   o1 <- "O"
+   l1 <- "L"
+   a1 <- "A"
+   a2 <- "A"
+   i1 <- "I"
+   cont1 <- 1
+   cont2 <- 1
+   cont3 <- 1
+   cont4 <- 1
+   cont5 <- 1
+   cont6 <- 1
+  caso "TRUST"
+   p1<-"****"
+   p2<-"*******"
+   p3<-"************"
+   p4<-"**************"
+   p5<-"********"
+   p6<-"*****"
+   o1 <- "*"
+   l1 <- "*"
+   a1 <- "*"
+   a2 <- "*"
+   i1 <- "*"
+   cont1 <- 0
+   cont2 <- 0
+   cont3 <- 0
+   cont4 <- 0
+   cont5 <- 0
+   cont6 <- 0
+  caso "NO ERRORS"
+   erros <- 0
+  outrocaso
+   erros <- erros + 1
+ fimescolha
+ contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+
+  // EM 5 ERROS DO USUÁRIO, È APRESENTADO A DICA
+ se (dica=falso) e (erros=5) entao
+   repita
+   limpatela
+   escreval("/------------------- Cidades --------------------/")
+   escreval
+   escreval("  (",contador,"/6 )    5º| ",copia(p5,1,1),"      ")
+   escreval("                   ",copia(p5,2,1),"                                  ")
+   escreval("              3º|  ",copia(p3,1,1)," ",a1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",copia(p3,7,1)," ",copia(p3,8,1)," ",copia(p3,9,1)," ",copia(p3,10,1)," ",copia(p3,11,1)," ",copia(p3,12,1),"       ")
+   escreval("           1º          ",copia(p5,4,1),"                              ")
+   escreval("           -             ",copia(p5,5,1),"                            ")
+   escreval("           ",copia(p1,1,1),"     6º| ",copia(p6,1,1),"     ",copia(p5,6,1),"          ")
+   escreval("   4º| ",copia(p4,1,1)," ",copia(p4,2,1)," ",o1," ",copia(p4,4,1)," ",copia(p4,5,1)," ",copia(p4,6,1)," ",copia(p4,7,1)," ",copia(p4,8,1)," ",a2," ",copia(p4,10,1)," ",copia(p4,11,1)," ",i1," ",copia(p4,13,1)," ",copia(p4,14,1),"     ")
+   escreval("           ",copia(p1,3,1),"             ",copia(p6,3,1),"     ",copia(p5,8,1),"      ")
+   escreval("           ",copia(p1,4,1),"               ",copia(p6,4,1),"          ")
+   escreval("                         2º| ",l1," ",copia(p2,2,1)," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",copia(p2,6,1)," ",copia(p2,7,1),"       ")
+   escreval("                                                  ")
+   escreval
+   escreval
+   escreval("                                                  ")
+   escreval("                  QUER UMA DICA?                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("            1.Sim                0.Não            ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+   
+   se (resp="1") entao
+    repita
+    limpatela
+    escreval("/------------------- Cidades --------------------/")
+    escreval
+    escreval("  (",contador,"/6 )    5º| ",copia(p5,1,1),"      ")
+    escreval("                   ",copia(p5,2,1),"                                  ")
+    escreval("              3º|  ",copia(p3,1,1)," ",a1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",copia(p3,7,1)," ",copia(p3,8,1)," ",copia(p3,9,1)," ",copia(p3,10,1)," ",copia(p3,11,1)," ",copia(p3,12,1),"       ")
+    escreval("           1º          ",copia(p5,4,1),"                              ")
+    escreval("           -             ",copia(p5,5,1),"                            ")
+    escreval("           ",copia(p1,1,1),"     6º| ",copia(p6,1,1),"     ",copia(p5,6,1),"          ")
+    escreval("   4º| ",copia(p4,1,1)," ",copia(p4,2,1)," ",o1," ",copia(p4,4,1)," ",copia(p4,5,1)," ",copia(p4,6,1)," ",copia(p4,7,1)," ",copia(p4,8,1)," ",a2," ",copia(p4,10,1)," ",copia(p4,11,1)," ",i1," ",copia(p4,13,1)," ",copia(p4,14,1),"     ")
+    escreval("           ",copia(p1,3,1),"             ",copia(p6,3,1),"     ",copia(p5,8,1),"      ")
+    escreval("           ",copia(p1,4,1),"               ",copia(p6,4,1),"          ")
+    escreval("                         2º| ",l1," ",copia(p2,2,1)," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",copia(p2,6,1)," ",copia(p2,7,1),"       ")
+    escreval("                                                  ")
+    escreval
+    escreval
+    escreval("                                                  ")
+    escreval("      ESCOLHA UMA LINHA PARA RECEBER A DICA!      ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma linha(1 a 6): ")
+    leia(resp)
+    ate (resp="1")ou(resp="2")ou(resp="3")ou(resp="4")ou(resp="5")ou(resp="6")
+
+    escolha resp
+     caso "1"
+      p1 <- "ROMA"
+      o1 <- "O"
+      cont1 <- 1
+     caso "2"
+      p2 <- "LONDRES"
+      l1 <- "L"
+      cont2 <- 1
+     caso "3"
+      p3 <- "MACHU-PICCHU"
+      a1 <- "A"
+      cont3 <- 1
+     caso "4"
+      p4 <- "RIO-DE-JANEIRO"
+      o1 <- "O"
+      a2 <- "A"
+      i1 <- "I"
+      cont4 <- 1
+     caso "5"
+      p5 <- "BRASÍLIA"
+      a1 <- "A"
+      i1 <- "I"
+      cont5 <- 1
+     caso "6"
+      p6 <- "NATAL"
+      a2 <- "A"
+      l1 <- "L"
+      cont6 <- 1
+    fimescolha
+    ver_dica <- "Sim"
+    vet_dicas[1] <- "Sim"
+    valor_dica <- 100
+   fimse
+   contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+   dica <- verdadeiro
+ fimse
+ ate (contador=6)
+ 
+  // CAPTAÇÃO DOS DADOS PARA O SCORE E APRESENTAÇÂO DO FINAL DA FASE
+ vet_erros[1] <- erros
+ x <- 1
+ score <- (1000 - valor_dica) - (erros * 50)
+ vet_score[1] <- score
+ limpatela
+ escreval("/------------------- Cidades --------------------/")
+ escreval
+ escreval("  (",contador,"/6 )    5º| ",copia(p5,1,1),"      ")
+ escreval("                   ",copia(p5,2,1),"              ")
+ escreval("              3º|  ",copia(p3,1,1)," ",a1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",copia(p3,7,1)," ",copia(p3,8,1)," ",copia(p3,9,1)," ",copia(p3,10,1)," ",copia(p3,11,1)," ",copia(p3,12,1),"       ")
+ escreval("           1º          ",copia(p5,4,1),"                              ")
+ escreval("           -             ",copia(p5,5,1),"                            ")
+ escreval("           ",copia(p1,1,1),"     6º| ",copia(p6,1,1),"     ",copia(p5,6,1),"          ")
+ escreval("   4º| ",copia(p4,1,1)," ",copia(p4,2,1)," ",o1," ",copia(p4,4,1)," ",copia(p4,5,1)," ",copia(p4,6,1)," ",copia(p4,7,1)," ",copia(p4,8,1)," ",a2," ",copia(p4,10,1)," ",copia(p4,11,1)," ",i1," ",copia(p4,13,1)," ",copia(p4,14,1),"     ")
+ escreval("           ",copia(p1,3,1),"             ",copia(p6,3,1),"     ",copia(p5,8,1),"      ")
+ escreval("           ",copia(p1,4,1),"               ",copia(p6,4,1),"          ")
+ escreval("                         2º| ",l1," ",copia(p2,2,1)," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",copia(p2,6,1)," ",copia(p2,7,1),"       ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("      - MUITO BEM! VOCÊ COMPLETOU A FASE! -       ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("      Total erros               Usou a dica?      ")
+ escreval
+ escreval("          ",erros,"                        ",ver_dica,"  ")
+ escreval("                      SCORE                       ")
+ escreval("                      ",score,"                   ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Aperte ENTER para continuar!")
+ leia(resp)
+ jogar
+fimprocedimento
+//-------------------------------------------------------------------//
+
+// FASE PAÌSES ------------------------------------------------------//
+procedimento fase_paises
+var
+resp,carregar,p1,p2,p3,p4,p5,p6,ver_dica:caracter
+erros,contador,cont1,cont2,cont3,cont4,cont5,cont6,score,loading,valor_dica:inteiro
+s1,s2,s3,a1,n1:caracter
+dica:logico
+inicio
+  se (y=1) entao
+   repita
+   limpatela
+   escreval("/------------------------------------------------/")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                       AVISO                      ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("           Você já finalizou está fase!           ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("       1.Jogar novamente           0.Voltar       ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+
+   se (resp="0") entao
+     jogar
+   fimse
+  fimse
+
+ para loading de 1 ate 31 faca
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("        _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _     ")
+ escreval("      /","/ AMÉ. /          / EUROPA  /         |\   ")
+ escreval("     /( NORTE_)         (__        )        /  \     ")
+ escreval("    /  `)    /            /`-- )´´)  ÁSIA  _)   \    ")
+ escreval("   /    \_ _/          _.--.-./   \_       )     \   ")
+ escreval("  /       \_\_ _      ( ÁFRI. )     \  _ _/       \  ")
+ escreval(" /        / AMÉ.\      `)    /       ´/.`|         \ ")
+ escreval("(        (  SUL  )      |    )     _´_- |           )")
+ escreval(" \        ` )   /       |   /     / OCE. ´\        / ")
+ escreval("  \         `  /         \_/      \_ _   ._´)     /  ")
+ escreval("   \         \/                       \.-/       /   ")
+ escreval("    \              _______________              /    ")
+ escreval("     \ _ _ _ _ _ _/   ANTÁRTIDA   \_ _ _ _ _ _ /     ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("            Carregando...                         ")
+ escreval("          |==============================|        ")
+ escreval("           ",carregar)
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ carregar<-carregar + ">"
+ fimpara
+
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("        _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _         ")
+ escreval("      /","/ AMÉ. /          / EUROPA  /         |\    ")
+ escreval("     /( NORTE_)         (__        )        /  \      ")
+ escreval("    /  `)    /            /`-- )´´)  ÁSIA  _)   \     ")
+ escreval("   /    \_ _/          _.--.-./   \_       )     \    ")
+ escreval("  /       \_\_ _      ( ÁFRI. )     \  _ _/       \   ")
+ escreval(" /        / AMÉ.\      `)    /       ´/.`|         \  ")
+ escreval("(        (  SUL  )      |    )     _´_- |           ) ")
+ escreval(" \        ` )   /       |   /     / OCE. ´\        /  ")
+ escreval("  \         `  /         \_/      \_ _   ._´)     /   ")
+ escreval("   \         \/                       \.-/       /    ")
+ escreval("    \              _______________              /     ")
+ escreval("     \ _ _ _ _ _ _/   ANTÁRTIDA   \_ _ _ _ _ _ /      ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("            Tudo pronto!                          ")
+ escreval("          |==============================|        ")
+ escreval("             APERTE ENTER PARA INICIAR            ")
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ leia(resp)
+
+ p1<-"*****"//CHINA
+ p2<-"******"//RUSSIA
+ p3<-"**************" //ESTADOS UNIDOS
+ p4<-"******"//BRASIL
+ p5<-"******"//FRANÇA
+ p6<-"******"//ISRAEL
+
+ a1<-"*"
+ n1<-"*"
+ s1<-"*"
+ s2<-"*"
+ s3<-"*"
+
+ ver_dica <- "Não"
+ vet_dicas[2] <- "Não"
+
+ repita
+ limpatela
+ escreval("/-------------------- Países --------------------/")
+ escreval("                                                  ")
+ escreval("  (",contador,"/6 )                               ")
+ escreval("               2º  4º    1º                       ")
+ escreval("               -   -     -                        ")
+ escreval("               ",copia(p2,1,1),"   ",copia(p4,1,1),"     ",copia(p1,1,1),"             6º")
+ escreval("               ",copia(p2,2,1),"     ",copia(p4,2,1),"     ",copia(p1,2,1),"           - ")
+ escreval("               ",copia(p2,3,1),"       ",copia(p4,3,1),"     ",copia(p1,3,1),"         ",copia(p6,1,1)," ")
+ escreval("         3º| ",copia(p3,1,1)," ",s1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",s2," ",copia(p3,8,1)," ",copia(p3,9,1)," ",n1," ",copia(p3,11,1)," ",copia(p3,12,1)," ",copia(p3,13,1)," ",s3,"  ")
+ escreval("               ",copia(p2,5,1),"           ",copia(p4,5,1),"     ",copia(p1,5,1),"     ",copia(p6,3,1),"  ")
+ escreval("       5º| ",copia(p5,1,1)," ",copia(p5,2,1)," ",a1," ",copia(p5,4,1)," ",copia(p5,5,1)," ",copia(p5,6,1),"       ",copia(p4,6,1),"         ",copia(p6,4,1),"  ")
+ escreval("                                       ",copia(p6,5,1),"  ")
+ escreval("                                       ",copia(p6,6,1),"  ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval(" 1º:País mais populoso | 4º:Conhecido como país   ")
+ escreval(" do mundo              | do Futebol e do carnaval ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - -  ")
+ escreval(" 2º:Atualmente(2022) em| 5º:País vencedor da copa ")
+ escreval(" guerra contra Ucrânia | do mundo de 2018         ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - -  ")
+ escreval(" 3º:Terra do tio Sam   | 6º:Terra santa bíblica,  ")
+ escreval("                       | sua capital é Jerusalém  ")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Digite a palavra: ")
+ leia(resp)
+ resp <- maiusc(resp)
+
+ escolha resp
+  caso "CHINA"
+   p1 <- "CHINA"
+   n1 <- "N"
+   cont1 <- 1
+  caso "RUSSIA"
+   p2 <- "RUSSIA"
+   s1 <- "S"
+   a1 <- "A"
+   cont2 <- 1
+  caso "ESTADOS UNIDOS"
+   p3 <- "ESTADOS-UNIDOS"
+   s1 <- "S"
+   s2 <- "S"
+   s3 <- "S"
+   n1 <- "N"
+   cont3 <- 1
+  caso "BRASIL"
+   p4 <- "BRASIL"
+   s2 <- "S"
+   cont4 <- 1
+  caso "FRANÇA"
+   p5 <- "FRANÇA"
+   a1 <- "A"
+   cont5 <- 1
+  caso "ISRAEL"
+   p6 <- "ISRAEL"
+   s3 <- "S"
+   cont6 <- 1
+  caso "VOLTAR"
+   menu
+  caso "ME DUMB"
+   p1<-"CHINA"
+   p2<-"RUSSIA"
+   p3<-"ESTADOS-UNIDOS"
+   p4<-"BRASIL"
+   p5<-"FRANÇA"
+   p6<-"ISRAEL"
+   s1 <- "S"
+   s2 <- "S"
+   a1 <- "A"
+   s3 <- "S"
+   n1 <- "N"
+   cont1 <- 1
+   cont2 <- 1
+   cont3 <- 1
+   cont4 <- 1
+   cont5 <- 1
+   cont6 <- 1
+  caso "TRUST"
+   p1<-"*****"
+   p2<-"******"
+   p3<-"**************"
+   p4<-"******"
+   p5<-"******"
+   p6<-"******"
+   s1 <- "*"
+   s2 <- "*"
+   a1 <- "*"
+   s3 <- "*"
+   n1 <- "*"
+   cont1 <- 0
+   cont2 <- 0
+   cont3 <- 0
+   cont4 <- 0
+   cont5 <- 0
+   cont6 <- 0
+  caso "NO ERRORS"
+   erros <- 0
+  outrocaso
+   erros <- erros + 1
+ fimescolha
+ contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+
+ se (dica=falso) e (erros=5) entao
+   repita
+   limpatela
+   escreval("/-------------------- Países --------------------/")
+   escreval("                                                  ")
+   escreval("  (",contador,"/6 )                               ")
+   escreval("               2º  4º    1º                       ")
+   escreval("               -   -     -                        ")
+   escreval("               ",copia(p2,1,1),"   ",copia(p4,1,1),"     ",copia(p1,1,1),"             6º")
+   escreval("               ",copia(p2,2,1),"     ",copia(p4,2,1),"     ",copia(p1,2,1),"           - ")
+   escreval("               ",copia(p2,3,1),"       ",copia(p4,3,1),"     ",copia(p1,3,1),"         ",copia(p6,1,1)," ")
+   escreval("         3º| ",copia(p3,1,1)," ",s1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",s2," ",copia(p3,8,1)," ",copia(p3,9,1)," ",n1," ",copia(p3,11,1)," ",copia(p3,12,1)," ",copia(p3,13,1)," ",s3,"  ")
+   escreval("               ",copia(p2,5,1),"           ",copia(p4,5,1),"     ",copia(p1,5,1),"     ",copia(p6,3,1),"  ")
+   escreval("       5º| ",copia(p5,1,1)," ",copia(p5,2,1)," ",a1," ",copia(p5,4,1)," ",copia(p5,5,1)," ",copia(p5,6,1),"       ",copia(p4,6,1),"         ",copia(p6,4,1),"  ")
+   escreval("                                       ",copia(p6,5,1),"  ")
+   escreval("                                       ",copia(p6,6,1),"  ")
+   escreval
+   escreval
+   escreval("                                                  ")
+   escreval("                  QUER UMA DICA?                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("            1.Sim                0.Não            ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+
+   se (resp="1") entao
+    repita
+    limpatela
+    escreval("/-------------------- Países --------------------/")
+    escreval("                                                  ")
+    escreval("  (",contador,"/6 )                               ")
+    escreval("               2º  4º    1º                       ")
+    escreval("               -   -     -                        ")
+    escreval("               ",copia(p2,1,1),"   ",copia(p4,1,1),"     ",copia(p1,1,1),"             6º")
+    escreval("               ",copia(p2,2,1),"     ",copia(p4,2,1),"     ",copia(p1,2,1),"           - ")
+    escreval("               ",copia(p2,3,1),"       ",copia(p4,3,1),"     ",copia(p1,3,1),"         ",copia(p6,1,1)," ")
+    escreval("         3º| ",copia(p3,1,1)," ",s1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",s2," ",copia(p3,8,1)," ",copia(p3,9,1)," ",n1," ",copia(p3,11,1)," ",copia(p3,12,1)," ",copia(p3,13,1)," ",s3,"  ")
+    escreval("               ",copia(p2,5,1),"           ",copia(p4,5,1),"     ",copia(p1,5,1),"     ",copia(p6,3,1),"  ")
+    escreval("       5º| ",copia(p5,1,1)," ",copia(p5,2,1)," ",a1," ",copia(p5,4,1)," ",copia(p5,5,1)," ",copia(p5,6,1),"       ",copia(p4,6,1),"         ",copia(p6,4,1),"  ")
+    escreval("                                       ",copia(p6,5,1),"  ")
+    escreval("                                       ",copia(p6,6,1),"  ")
+    escreval
+    escreval
+    escreval("                                                  ")
+    escreval("      ESCOLHA UMA LINHA PARA RECEBER A DICA!      ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma linha(1 a 6): ")
+    leia(resp)
+    ate (resp="1")ou(resp="2")ou(resp="3")ou(resp="4")ou(resp="5")ou(resp="6")
+
+    escolha resp
+     caso "1"
+      p1 <- "CHINA"
+      n1 <- "N"
+      cont1 <- 1
+     caso "2"
+      p2 <- "RUSSIA"
+      s1 <- "S"
+      a1 <- "A"
+      cont2 <- 1
+     caso "3"
+      p3 <- "ESTADOS-UNIDOS"
+      s1 <- "S"
+      s2 <- "S"
+      s3 <- "S"
+      n1 <- "N"
+      cont3 <- 1
+     caso "4"
+      p4 <- "BRASIL"
+      s2 <- "S"
+      cont4 <- 1
+     caso "5"
+      p5 <- "FRANÇA"
+      a1 <- "A"
+      cont5 <- 1
+     caso "6"
+      p6 <- "ISRAEL"
+      s3 <- "S"
+      cont6 <- 1
+    fimescolha
+    ver_dica <- "Sim"
+    valor_dica <- 100
+    vet_dicas[2] <- "Sim"
+   fimse
+   contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+   dica <- verdadeiro
+ fimse
+ ate (contador=6)
+ 
+ vet_erros[2] <- erros
+ y <- 1
+ score <- (1000 - valor_dica) - (erros * 50)
+ vet_score[2] <- score
+ limpatela
+ escreval("/-------------------- Países --------------------/")
+ escreval("                                                  ")
+ escreval("  (",contador,"/6 )                               ")
+ escreval("               2º  4º    1º                       ")
+ escreval("               -   -     -                        ")
+ escreval("               ",copia(p2,1,1),"   ",copia(p4,1,1),"     ",copia(p1,1,1),"             6º")
+ escreval("               ",copia(p2,2,1),"     ",copia(p4,2,1),"     ",copia(p1,2,1),"           - ")
+ escreval("               ",copia(p2,3,1),"       ",copia(p4,3,1),"     ",copia(p1,3,1),"         ",copia(p6,1,1)," ")
+ escreval("         3º| ",copia(p3,1,1)," ",s1," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",copia(p3,6,1)," ",s2," ",copia(p3,8,1)," ",copia(p3,9,1)," ",n1," ",copia(p3,11,1)," ",copia(p3,12,1)," ",copia(p3,13,1)," ",s3,"  ")
+ escreval("               ",copia(p2,5,1),"           ",copia(p4,5,1),"     ",copia(p1,5,1),"     ",copia(p6,3,1),"  ")
+ escreval("       5º| ",copia(p5,1,1)," ",copia(p5,2,1)," ",a1," ",copia(p5,4,1)," ",copia(p5,5,1)," ",copia(p5,6,1),"       ",copia(p4,6,1),"         ",copia(p6,4,1),"  ")
+ escreval("                                       ",copia(p6,5,1),"  ")
+ escreval("                                       ",copia(p6,6,1),"  ")
+ escreval("                                                  ")
+ escreval("      - MUITO BEM! VOCÊ COMPLETOU A FASE! -       ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("      Total erros               Usou a dica?      ")
+ escreval
+ escreval("          ",erros,"                        ",ver_dica,"  ")
+ escreval("                      SCORE                       ")
+ escreval("                      ",score,"                   ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Aperte ENTER para continuar!")
+ leia(resp)
+ jogar
+fimprocedimento
+//-------------------------------------------------------------------//
+
+// FASE ANIMAIS -----------------------------------------------------//
+procedimento fase_animais
+var
+resp,carregar,p1,p2,p3,p4,p5,p6,ver_dica:caracter
+erros,contador,cont1,cont2,cont3,cont4,cont5,cont6,score,loading,valor_dica:inteiro
+a1,a2,r1,l1,o1:caracter
+dica:logico
+inicio
+  se (z=1) entao
+   repita
+   limpatela
+   escreval("/------------------------------------------------/")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                       AVISO                      ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("           Você já finalizou está fase!           ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("       1.Jogar novamente           0.Voltar       ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+
+   se (resp="0") entao
+     jogar
+   fimse
+  fimse
+
+ para loading de 1 ate 31 faca
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                              .-.         .-.     ")
+ escreval("                             (   \__.-.__/   )    ")
+ escreval("                              \  __     __  /     ")
+ escreval(" {O,O}                         | \o\   /o/ |      ")
+ escreval(" /)__)   |\__                   \  '   '  /       ")
+ escreval("--'-'-|  |  o\___               /\_´-v-`_/\       ")
+ escreval("------|  | ´   __/             /  \._|_./  \      ")
+ escreval("         /    /               |    \___/    |     ")
+ escreval("         *****´               |             |     ")
+ escreval("        /    }       .WW.    _|             |_    ")
+ escreval("       /    /      .\WWW=   / |   |     |   | \   ")
+ escreval("      /     \      \WWW=   |  |   |     |   |  |  ")
+ escreval("  |  /     \ \     \WW=    |  |   |     |   |  |  ")
+ escreval("  \ /`      \ \    ( (     |  |   \     /   |  |  ")
+ escreval("   `\      /_\ \    \ \__.-'   \   \   /   /  /   ")
+ escreval("_____`~~~~~~___~~_____`-._.-(...(...)---(...)...)_")
+ escreval
+ escreval("            Carregando...                         ")
+ escreval("          |==============================|        ")
+ escreval("           ",carregar)
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ carregar<-carregar + ">"
+ fimpara
+
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                              .-.         .-.     ")
+ escreval("                             (   \__.-.__/   )    ")
+ escreval("                              \  __     __  /     ")
+ escreval(" {O,O}                         | \o\   /o/ |      ")
+ escreval(" /)__)   |\__                   \  '   '  /       ")
+ escreval("--'-'-|  |  o\___               /\_´-v-`_/\       ")
+ escreval("------|  | ´   __/             /  \._|_./  \      ")
+ escreval("         /    /               |    \___/    |     ")
+ escreval("         *****´               |             |     ")
+ escreval("        /    }       .WW.    _|             |_    ")
+ escreval("       /    /      .\WWW=   / |   |     |   | \   ")
+ escreval("      /     \      \WWW=   |  |   |     |   |  |  ")
+ escreval("  |  /     \ \     \WW=    |  |   |     |   |  |  ")
+ escreval("  \ /`      \ \    ( (     |  |   \     /   |  |  ")
+ escreval("   `\      /_\ \    \ \__.-'   \   \   /   /  /   ")
+ escreval("_____`~~~~~~___~~_____`-._.-(...(...)---(...)...)_")
+ escreval
+ escreval("            Tudo pronto!                          ")
+ escreval("          |==============================|        ")
+ escreval("             APERTE ENTER PARA INICIAR            ")
+ escreval("          |==============================|        ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+ leia(resp)
+
+ p1<-"****"//LEÃO
+ p2<-"********"//CACHORRO
+ p3<-"******"//BALEIA
+ p4<-"*****"//POLVO
+ p5<-"******"//CORUJA
+ p6<-"********"//CAMALEÃO
+
+ a1<-"*"
+ a2<-"*"
+ l1<-"*"
+ r1<-"*"
+ o1<-"*"
+
+ ver_dica <- "Não"
+ vet_dicas[3] <- "Não"
+
+ repita
+ limpatela
+ escreval("/------------------- Animais --------------------/")
+ escreval("                                                  ")
+ escreval("  (",contador,"/6 )                       4º      ")
+ escreval("                    6º          -                 ")
+ escreval("                    -   5º      ",copia(p4,1,1)," ")
+ escreval("                    ",copia(p6,1,1),"   -       ",copia(p4,2,1),"                    ")
+ escreval("      3º| ",copia(p3,1,1)," ",copia(p3,2,1)," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",a1,"   ",copia(p5,1,1),"   1º| ",l1," ",copia(p1,2,1)," ",copia(p1,3,1)," ",copia(p1,4,1),"              ")
+ escreval("                    ",copia(p6,3,1),"     ",copia(p5,2,1),"     ",copia(p4,4,1),"                    ")
+ escreval("              2º| ",copia(p2,1,1)," ",a2," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",r1," ",copia(p2,7,1)," ",o1,"           ")
+ escreval("                    ",copia(p6,5,1),"         ",copia(p5,4,1),"                       ")
+ escreval("                    ",copia(p6,6,1),"           ",copia(p5,5,1),"                     ")
+ escreval("                    ",copia(p6,7,1),"             ",copia(p5,6,1),"                   ")
+ escreval("                    ",copia(p6,8,1),"            ")
+ escreval
+ escreval
+ escreval(" 1º:Rei da selva       | 4º:Molusco com oito ten-")
+ escreval("                       | táculos                 ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - - ")
+ escreval(" 2º:Melhor amigo do    | 5º:Ave noturna, consegue")
+ escreval(" homem                 | girar o pescoço a 270º  ")
+ escreval(" - - - - - - - - - - - | - - - - - - - - - - - - ")
+ escreval(" 3º:Maior mamífero do  | 6º:Réptil, possui a ha- ")
+ escreval(" planeta terra         | bilidade de mudar de cor")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Digite a palavra: ")
+ leia(resp)
+ resp <- maiusc(resp)
+
+ escolha resp
+  caso "LEAO"
+   p1 <- "LEÃO"
+   l1 <- "L"
+   cont1 <- 1
+  caso "LEÃO"
+   p1 <- "LEÃO"
+   l1 <- "L"
+   cont1 <- 1
+  caso "CACHORRO"
+   p2 <- "CACHORRO"
+   a2 <- "A"
+   r1 <- "R"
+   o1 <- "O"
+   cont2 <- 1
+  caso "BALEIA"
+   p3 <- "BALEIA"
+   a1 <- "A"
+   cont3 <- 1
+  caso "POLVO"
+   p4 <- "POLVO"
+   l1 <- "L"
+   o1 <- "O"
+   cont4 <- 1
+  caso "CORUJA"
+   p5 <- "CORUJA"
+   r1 <- "R"
+   cont5 <- 1
+  caso "CAMALEAO"
+   p6 <- "CAMALEÃO"
+   a1 <- "A"
+   a2 <- "A"
+   cont6 <- 1
+  caso "CAMALEÃO"
+   p6 <- "CAMALEÃO"
+   a1 <- "A"
+   a2 <- "A"
+   cont6 <- 1
+  caso "VOLTAR"
+   menu
+  caso "ME DUMB"
+   p1<-"LEÃO"
+   p2<-"CACHORRO"
+   p3<-"BALEIA"
+   p4<-"POLVO"
+   p5<-"CORUJA"
+   p6<-"CAMALEÃO"
+   o1 <- "O"
+   l1 <- "L"
+   a1 <- "A"
+   a2 <- "A"
+   r1 <- "R"
+   cont1 <- 1
+   cont2 <- 1
+   cont3 <- 1
+   cont4 <- 1
+   cont5 <- 1
+   cont6 <- 1
+  caso "TRUST"
+   p1<-"****"
+   p2<-"********"
+   p3<-"******"
+   p4<-"*****"
+   p5<-"******"
+   p6<-"********"
+   o1 <- "*"
+   l1 <- "*"
+   a1 <- "*"
+   a2 <- "*"
+   r1 <- "*"
+   cont1 <- 0
+   cont2 <- 0
+   cont3 <- 0
+   cont4 <- 0
+   cont5 <- 0
+   cont6 <- 0
+  caso "NO ERRORS"
+   erros <- 0
+  outrocaso
+   erros <- erros + 1
+ fimescolha
+ contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+
+ se (dica=falso) e (erros=5) entao
+   repita
+   limpatela
+   escreval("/------------------- Animais --------------------/")
+   escreval("                                                  ")
+   escreval("  (",contador,"/6 )                       4º      ")
+   escreval("                    6º          -                 ")
+   escreval("                    -   5º      ",copia(p4,1,1)," ")
+   escreval("                    ",copia(p6,1,1),"   -       ",copia(p4,2,1),"                    ")
+   escreval("      3º| ",copia(p3,1,1)," ",copia(p3,2,1)," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",a1,"   ",copia(p5,1,1),"   1º| ",l1," ",copia(p1,2,1)," ",copia(p1,3,1)," ",copia(p1,4,1),"              ")
+   escreval("                    ",copia(p6,3,1),"     ",copia(p5,2,1),"     ",copia(p4,4,1),"                    ")
+   escreval("              2º| ",copia(p2,1,1)," ",a2," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",r1," ",copia(p2,7,1)," ",o1,"           ")
+   escreval("                    ",copia(p6,5,1),"         ",copia(p5,4,1),"                       ")
+   escreval("                    ",copia(p6,6,1),"           ",copia(p5,5,1),"                     ")
+   escreval("                    ",copia(p6,7,1),"             ",copia(p5,6,1),"                   ")
+   escreval("                    ",copia(p6,8,1),"             ")
+   escreval
+   escreval
+   escreval("                                                  ")
+   escreval("                  QUER UMA DICA?                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("            1.Sim                0.Não            ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("                                                  ")
+   escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma opção(1/0): ")
+   leia(resp)
+   ate (resp="0") ou (resp="1")
+
+   se (resp="1") entao
+    repita
+    limpatela
+    escreval("/------------------- Animais --------------------/")
+    escreval("                                                  ")
+    escreval("  (",contador,"/6 )                       4º      ")
+    escreval("                    6º          -                 ")
+    escreval("                    -   5º      ",copia(p4,1,1)," ")
+    escreval("                    ",copia(p6,1,1),"   -       ",copia(p4,2,1),"                    ")
+    escreval("      3º| ",copia(p3,1,1)," ",copia(p3,2,1)," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",a1,"   ",copia(p5,1,1),"   1º| ",l1," ",copia(p1,2,1)," ",copia(p1,3,1)," ",copia(p1,4,1),"              ")
+    escreval("                    ",copia(p6,3,1),"     ",copia(p5,2,1),"     ",copia(p4,4,1),"                    ")
+    escreval("              2º| ",copia(p2,1,1)," ",a2," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",r1," ",copia(p2,7,1)," ",o1,"           ")
+    escreval("                    ",copia(p6,5,1),"         ",copia(p5,4,1),"                       ")
+    escreval("                    ",copia(p6,6,1),"           ",copia(p5,5,1),"                     ")
+    escreval("                    ",copia(p6,7,1),"             ",copia(p5,6,1),"                   ")
+    escreval("                    ",copia(p6,8,1),"             ")
+    escreval
+    escreval
+    escreval("                                                  ")
+    escreval("      ESCOLHA UMA LINHA PARA RECEBER A DICA!      ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("                                                  ")
+    escreval("/------------------------------------------------/")
+    escreva(" -> Selecione uma linha(1 a 6): ")
+    leia(resp)
+    ate (resp="1")ou(resp="2")ou(resp="3")ou(resp="4")ou(resp="5")ou(resp="6")
+
+    escolha resp
+     caso "1"
+      p1 <- "LEÃO"
+      l1 <- "L"
+      cont1 <- 1
+     caso "2"
+      p2 <- "CACHORRO"
+      a2 <- "A"
+      r1 <- "R"
+      o1 <- "O"
+      cont2 <- 1
+     caso "3"
+      p3 <- "BALEIA"
+      a1 <- "A"
+      cont3 <- 1
+     caso "4"
+      p4 <- "POLVO"
+      l1 <- "L"
+      o1 <- "O"
+      cont4 <- 1
+     caso "5"
+      p5 <- "CORUJA"
+      r1 <- "R"
+      cont5 <- 1
+     caso "6"
+      p6 <- "CAMALEÃO"
+      a1 <- "A"
+      a2 <- "A"
+      cont6 <- 1
+    fimescolha
+    ver_dica <- "Sim"
+    vet_dicas[3] <- "Sim"
+    valor_dica <- 100
+   fimse
+   contador <- cont1 + cont2 + cont3 + cont4 + cont5 + cont6
+   dica <- verdadeiro
+ fimse
+ ate (contador=6)
+ 
+ vet_erros[3] <- erros
+ z <- 1
+ score <- (1000 - valor_dica) - (erros * 50)
+ vet_score[3] <- score
+ limpatela
+ escreval("/------------------- Animais --------------------/")
+ escreval("                                                  ")
+ escreval("  (",contador,"/6 )                       4º      ")
+ escreval("                    6º          -                 ")
+ escreval("                    -   5º      ",copia(p4,1,1)," ")
+ escreval("                    ",copia(p6,1,1),"   -       ",copia(p4,2,1),"                    ")
+ escreval("      3º| ",copia(p3,1,1)," ",copia(p3,2,1)," ",copia(p3,3,1)," ",copia(p3,4,1)," ",copia(p3,5,1)," ",a1,"   ",copia(p5,1,1),"   1º| ",l1," ",copia(p1,2,1)," ",copia(p1,3,1)," ",copia(p1,4,1),"              ")
+ escreval("                    ",copia(p6,3,1),"     ",copia(p5,2,1),"     ",copia(p4,4,1),"                    ")
+ escreval("              2º| ",copia(p2,1,1)," ",a2," ",copia(p2,3,1)," ",copia(p2,4,1)," ",copia(p2,5,1)," ",r1," ",copia(p2,7,1)," ",o1,"           ")
+ escreval("                    ",copia(p6,5,1),"         ",copia(p5,4,1),"                       ")
+ escreval("                    ",copia(p6,6,1),"           ",copia(p5,5,1),"                     ")
+ escreval("                    ",copia(p6,7,1),"             ",copia(p5,6,1),"                   ")
+ escreval("                    ",copia(p6,8,1),"             ")
+ escreval("                                                  ")
+ escreval("      - MUITO BEM! VOCÊ COMPLETOU A FASE! -       ")
+ escreval("                                                  ")
+ escreval("                                                  ")
+ escreval("      Total erros               Usou a dica?      ")
+ escreval
+ escreval("          ",erros,"                        ",ver_dica," ")
+ escreval("                      SCORE                       ")
+ escreval("                      ",score,"                   ")
+ escreval("                                                  ")
+ escreval("/------------------------------------------------/")
+  escreva(" -> Aperte ENTER para continuar!")
+ leia(resp)
+ jogar
+fimprocedimento
+//-------------------------------------------------------------------//
+
+Inicio
+
+ // LOADING INICIAL
+ para n de 1 ate 31 faca
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("                  _ _ _    _ _     _ _    _ _     ")
+ escreval("   \          /  |     |  |    |  |   \  (        ")
+ escreval("    \        /   |     |  |_ _ |  |    \  \ _     ")
+ escreval("     \  /\  /    |     |  |   \   |    /     `)   ")
+ escreval("      \/  \/     |_ _ _|  |    \  |_ _/   _ _/    ")
+ escreval("                                                  ")
+ escreval
+ escreval("            Carregando...                         ")
+ escreval("          |==============================|        ")
+ escreval("           ",carregar)
+ escreval("          |==============================|        ")
+ escreval
+ escreval
+ escreval("/------------------------------------------------/")
+  carregar <- ">" + carregar
+ fimpara
+ limpatela
+ escreval("/------------------------------------------------/")
+ escreval("                                                  ")
+ escreval("                  _ _ _    _ _     _ _    _ _     ")
+ escreval("   \          /  |     |  |    |  |   \  (        ")
+ escreval("    \        /   |     |  |_ _ |  |    \  \ _     ")
+ escreval("     \  /\  /    |     |  |   \   |    /     `)   ")
+ escreval("      \/  \/     |_ _ _|  |    \  |_ _/   _ _/    ")
+ escreval("                                                  ")
+ escreval
+ escreval("            Tudo pronto!                          ")
+ escreval("          |==============================|        ")
+ escreval("             APERTE ENTER PARA INICIAR            ")
+ escreval("          |==============================|        ")
+ escreval
+ escreval
+ escreval("/------------------------------------------------/")
+  escreva(" Obs: aumente o tamanho do console                                                  ")
+ leia(carregar)
+ menu
+ 
+// CHEATS
+// ME DUMB - Revela todas as palavras e completa a fase
+// NO ERRORS - Zera todos os erros cometidos
+// TRUST - ???????
